@@ -1,7 +1,9 @@
 /build/*
+juce/
+
 **/.DS_Store
 **/._.DS_Store
-juce/
+__pycache__/
 
 # Prerequisites
 *.d
