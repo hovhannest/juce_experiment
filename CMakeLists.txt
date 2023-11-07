@@ -13,6 +13,18 @@ if (CMAKE_SYSTEM_NAME MATCHES "Windows")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
 
+find_package(Python COMPONENTS Interpreter REQUIRED)
+
+# detect virtualenv and set Pip args accordingly
+if(DEFINED ENV{VIRTUAL_ENV} OR DEFINED ENV{CONDA_PREFIX})
+  set(_pip_args)
+else()
+  set(_pip_args "--user")
+endif()
+
+# install PyPI Python package using pip
+execute_process(COMMAND ${Python_EXECUTABLE} -m pip install -r ${CMAKE_CURRENT_SOURCE_DIR}/test/regression/requirements.txt)
+
 CPMAddPackage(
     NAME JUCE
     GITHUB_REPOSITORY juce-framework/JUCE
