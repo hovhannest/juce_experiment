@@ -26,7 +26,7 @@ def closeAll(app_path):
     if sys.platform == "win32":
         pg = os.path.join(os.path.dirname(__file__), "kill_process.ps1")
         subprocess.run(["powershell", pg , app_path], shell=True, check=True)
-    if sys.platform == "darwin":
+    elif sys.platform == "darwin":
         quit_process = subprocess.Popen(f"osascript -e 'quit app \"{app_path}\"'", shell=True)
         quit_process.wait()
     else:
