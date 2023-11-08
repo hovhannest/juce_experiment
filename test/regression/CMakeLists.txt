@@ -1,4 +1,4 @@
-find_package (Python COMPONENTS Interpreter)
+find_package (Python COMPONENTS Interpreter REQUIRED)
 if(Python_FOUND)
     message(STATUS "Python version ${Python_VERSION} found")
     message(STATUS "Python executable: ${Python_EXECUTABLE}")
@@ -7,6 +7,16 @@ if(Python_FOUND)
     message(STATUS "Python library directories: ${Python_LIBRARY_DIRS}")
     message(STATUS "Python libraries: ${Python_LIBRARIES}")
 endif()
+
+# detect virtualenv and set Pip args accordingly
+if(DEFINED ENV{VIRTUAL_ENV} OR DEFINED ENV{CONDA_PREFIX})
+  set(_pip_args)
+else()
+  set(_pip_args "--user")
+endif()
+
+# install PyPI Python package using pip
+execute_process(COMMAND ${Python_EXECUTABLE} -m pip install -r ${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt )
 
 function(concatenate_intest_app_paths result_var base_path component)
     # Determine the platform-specific path separator
