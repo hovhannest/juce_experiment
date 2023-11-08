@@ -1,13 +1,5 @@
-if (CMAKE_SYSTEM_NAME MATCHES "Windows")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+
+add_subdirectory(unittest)      # Include the unittest   subdirectory
+if(NOT DEFINED ENV{CI})         # Only if not running on GitHub actions. We don't have display there
+    add_subdirectory(regression)    # Include the regression subdirectory 
 endif()
-
-# Set up the test executable
-add_executable(test_hello_world test_foo.cpp)
-
-# Link the test executable with Google Test and your function library
-target_link_libraries(test_hello_world gtest my_functions)
-
-# Add a test to be run by ctest
-add_test(NAME test_hello_world COMMAND test_hello_world)

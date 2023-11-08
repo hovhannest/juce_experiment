@@ -13,26 +13,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "Windows")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
 
-# Option to enable testing
-option(ENABLE_TESTING "Enable testing" ON)
-
-# Option to specify the GTest installation directory
-set(GTEST_INSTALL_DIR "" CACHE PATH "Path to Google Test installation directory")
-
-if (ENABLE_TESTING)
-    enable_testing()
-
-    CPMAddPackage(
-        NAME googletest
-        GITHUB_REPOSITORY google/googletest
-        GIT_TAG release-1.12.1
-        VERSION 1.12.1
-        OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt"
-    )
-
-    add_subdirectory(test) # Include the test subdirectory
-endif()
-
 CPMAddPackage(
     NAME JUCE
     GITHUB_REPOSITORY juce-framework/JUCE
@@ -91,9 +71,32 @@ target_link_libraries(hello_world
         # GuiAppData            # If we'd created a binary data target, we'd link to it here
         juce::juce_gui_extra
         my_functions
+        -static-libstdc++
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 )
 
+# Option to enable testing
+option(ENABLE_TESTING "Enable testing" ON)
+
+# Option to specify the GTest installation directory
+set(GTEST_INSTALL_DIR "" CACHE PATH "Path to Google Test installation directory")
+
+if (ENABLE_TESTING)
+    enable_testing()
+
+    CPMAddPackage(
+        NAME googletest
+        GITHUB_REPOSITORY google/googletest
+        GIT_TAG release-1.12.1
+        VERSION 1.12.1
+        OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt"
+    )
+    # Get the executable path of the hello_world target
+    get_target_property(TESTING_EXECUTABLE_DIR hello_world RUNTIME_OUTPUT_DIRECTORY)
+    get_target_property(TESTING_EXECUTABLE_NAME hello_world OUTPUT_NAME)
+
+    add_subdirectory(test) # Include the test subdirectory
+endif()
