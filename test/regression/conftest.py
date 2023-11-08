@@ -23,11 +23,14 @@ def app_path(request):
     return name_value.replace('/', os.path.sep).replace('\\', os.path.sep)
 
 def closeAll(app_path):
-    if sys.platform == "win32":  # Windows
+    if sys.platform == "win32":
         pg = os.path.join(os.path.dirname(__file__), "kill_process.ps1")
         subprocess.run(["powershell", pg , app_path], shell=True, check=True)
+    if sys.platform == "darwin":
+        quit_process = subprocess.Popen(f"osascript -e 'quit app \"{app_path}\"'", shell=True)
+        quit_process.wait()
     else:
-        subprocess.run(["killall", "-w", app_path], shell=True)
+        subprocess.run(["killall", app_path], shell=False)
 
 
 def get_resource(path):
@@ -69,6 +72,6 @@ def start_application(app_path):
     closeAll(app_path)
     app_process = subprocess.Popen(open_args)
     # Allow some time for the application to start (you may need to adjust the sleep duration)
-    time.sleep(1)
+    time.sleep(2)
     yield app_process
     closeAll(app_path)

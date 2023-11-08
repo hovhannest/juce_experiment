@@ -83,6 +83,7 @@ target_link_libraries(hello_world
         # GuiAppData            # If we'd created a binary data target, we'd link to it here
         juce::juce_gui_extra
         my_functions
+        -static-libstdc++
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
