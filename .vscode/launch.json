@@ -8,7 +8,18 @@
             "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world",
+            "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world.app/Contents/MacOS/hello_world",
+            },
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world",
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world.exe",
+            },
             "args": [],
             "stopAtEntry": false,
             "environment": [],
