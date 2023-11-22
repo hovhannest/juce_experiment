@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world.app/Contents/MacOS/hello_world",
+            },
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world",
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceRoot}/build/hello_world_artefacts/Debug/hello_world.exe",
+            },
+            "args": [],
+            "stopAtEntry": false,
+            "environment": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "build"
+        }
+    ]
+}
