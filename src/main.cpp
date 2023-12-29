@@ -5,7 +5,9 @@ class GuiAppApplication final : public juce::JUCEApplication
 {
 public:
     //==============================================================================
-    GuiAppApplication() {}
+    GuiAppApplication() 
+        : mainComponent(new MainComponent())
+    {}
 
     // We inject these as compile definitions from the CMakeLists.txt
     // If you've enabled the juce header with `juce_generate_juce_header(<thisTarget>)`
@@ -20,7 +22,7 @@ public:
         // This method is where you should put your application's initialisation code..
         juce::ignoreUnused (commandLine);
 
-        mainWindow.reset (new MainWindow (getApplicationName()));
+        mainWindow.reset (new MainWindow (getApplicationName(), mainComponent.get()));
     }
 
     void shutdown() override
@@ -54,14 +56,14 @@ public:
     class MainWindow final : public juce::DocumentWindow
     {
     public:
-        explicit MainWindow (juce::String name)
+        explicit MainWindow (juce::String name, MainComponent* c)
             : DocumentWindow (name,
                               juce::Desktop::getInstance().getDefaultLookAndFeel()
                                                           .findColour (ResizableWindow::backgroundColourId),
                               DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainComponent(), true);
+            setContentNonOwned (c, true);
 
            #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
@@ -95,6 +97,7 @@ public:
 
 private:
     std::unique_ptr<MainWindow> mainWindow;
+    std::unique_ptr<MainComponent> mainComponent;
 };
 
 //==============================================================================

@@ -2,8 +2,28 @@
 
 //==============================================================================
 MainComponent::MainComponent()
+    : audioSetupComp (deviceManager,
+                        0,     // minimum input channels
+                        256,   // maximum input channels
+                        0,     // minimum output channels
+                        256,   // maximum output channels
+                        false, // ability to select midi inputs
+                        false, // ability to select midi output device
+                        false, // treat channels as stereo pairs
+                        false) // hide advanced options
 {
+    addAndMakeVisible (audioSetupComp);
     setSize (600, 400);
+    
+    setAudioChannels (2, 2);
+    deviceManager.addChangeListener (this);
+    dumpDeviceInfo();
+}
+
+MainComponent::~MainComponent()
+{
+    deviceManager.removeChangeListener (this);
+    shutdownAudio();
 }
 
 //==============================================================================
@@ -19,7 +39,17 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    // This is called when the MainComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+        auto rect = getLocalBounds();
+
+        audioSetupComp.setBounds (rect.removeFromLeft (proportionOfWidth (0.6f)));
+        rect.reduce (10, 10);
+}
+
+void MainComponent::changeListenerCallback (juce::ChangeBroadcaster* cb)
+{
+    if(&deviceManager == cb)
+    {
+        dumpDeviceInfo();
+        return;
+    }
 }

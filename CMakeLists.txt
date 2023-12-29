@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 project(HelloWorldApp VERSION 0.0.1)
 
-# Set the C++ standard to C++17
-set(CMAKE_CXX_STANDARD 17)
+# Set the C++ standard to C++20
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(cmake/cpm.cmake)
@@ -32,6 +32,8 @@ juce_add_gui_app(hello_world
     # ICON_SMALL ...
     # DOCUMENT_EXTENSIONS ...           # Specify file extensions that should be associated with this app
     # COMPANY_NAME ...                  # Specify the name of the app's author
+    MICROPHONE_PERMISSION_ENABLED 1
+    MICROPHONE_PERMISSION_TEXT "Microphone access is Needed."
     PRODUCT_NAME "hello_world"
 )         # The name of the final executable, which can differ from the target name
 
@@ -70,6 +72,8 @@ target_link_libraries(hello_world
     PRIVATE
         # GuiAppData            # If we'd created a binary data target, we'd link to it here
         juce::juce_gui_extra
+        juce::juce_audio_devices
+        juce::juce_audio_utils
         my_functions
         -static-libstdc++
     PUBLIC

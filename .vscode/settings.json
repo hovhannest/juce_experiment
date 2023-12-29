@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.mm": "cpp",
+        "array": "cpp",
+        "span": "cpp"
+    }
+}
